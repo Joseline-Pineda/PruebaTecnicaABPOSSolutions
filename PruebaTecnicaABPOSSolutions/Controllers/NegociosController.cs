@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using PruebaTecnicaABPOSSolutions.Data;
 using PruebaTecnicaABPOSSolutions.Inputs;
 using PruebaTecnicaABPOSSolutions.Models;
+using PruebaTecnicaABPOSSolutions.ViewModels;
 
 namespace PruebaTecnicaABPOSSolutions.Controllers
 {
@@ -27,7 +28,8 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Negocios.Include(n => n.User);
-            return View(await applicationDbContext.ToListAsync());
+            var result = await applicationDbContext.ToListAsync();
+            return View(_mapper.Map<IEnumerable<NegocioViewModel>>(result));
         }
 
         // GET: Negocios/Details/5
@@ -52,7 +54,7 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
         // GET: Negocios/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Nombres");
             return View();
         }
 
@@ -61,24 +63,17 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nombre,Descripcion,FechaCreacion,UserId")] NegocioInput negocio)
+        public async Task<IActionResult> Create([Bind("Nombre,Descripcion,UserId")] NegocioInput negocio)
         {
             if (ModelState.IsValid)
             {
-                //var nuevoNegocio = new Negocio() 
-                //{ 
-                //    Descripcion= negocio.Descripcion, 
-                //    FechaCreacion = negocio.FechaCreacion,
-                //    Nombre = negocio.Nombre,
-                //    UserId = negocio.UserId
-                //};
-
-                _context.Add(_mapper.Map<Negocio>(negocio));
+                var nuevoNegocio = _mapper.Map<Negocio>(negocio);
+                nuevoNegocio.FechaCreacion = DateTime.Now;
+                _context.Add(nuevoNegocio);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
 
             }
-
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", negocio.UserId);
             return View(negocio);
         }
@@ -96,7 +91,7 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", negocio.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Nombres", negocio.UserId);
             return View(_mapper.Map<NegocioInput>(negocio));
         }
 

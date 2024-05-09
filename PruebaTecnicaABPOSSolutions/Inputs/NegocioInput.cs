@@ -7,6 +7,5 @@
         public string? Descripcion { get; set; }
         public DateTime FechaCreacion { get; set; }
         public string UserId { get; set; }
-        public string User { get; set; }
     }
 }
