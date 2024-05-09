@@ -5,100 +5,99 @@ using Microsoft.EntityFrameworkCore;
 using PruebaTecnicaABPOSSolutions.Data;
 using PruebaTecnicaABPOSSolutions.Inputs;
 using PruebaTecnicaABPOSSolutions.Models;
-using PruebaTecnicaABPOSSolutions.ViewModels;
 
 namespace PruebaTecnicaABPOSSolutions.Controllers
 {
-    public class NegociosController : Controller
+    public class MenusController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public NegociosController(ApplicationDbContext context, IMapper mapper)
+        public MenusController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        // GET: Negocios
+        // GET: Menus
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Negocios.Include(n => n.User);
-            var result = await applicationDbContext.ToListAsync();
-            return View(_mapper.Map<IEnumerable<NegocioViewModel>>(result));
+            var applicationDbContext = _context.Menus.Include(m => m.Categoria).Include(m => m.Negocio);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Negocios/Details/5
+        // GET: Menus/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Negocios == null)
+            if (id == null || _context.Menus == null)
             {
                 return NotFound();
             }
 
-            var negocio = await _context.Negocios
-                .Include(n => n.User)
+            var menu = await _context.Menus
+                .Include(m => m.Categoria)
+                .Include(m => m.Negocio)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (negocio == null)
+            if (menu == null)
             {
                 return NotFound();
             }
 
-            return View(negocio);
+            return View(menu);
         }
 
-        // GET: Negocios/Create
+        // GET: Menus/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Nombres");
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre");
+            ViewData["NegocioId"] = new SelectList(_context.Negocios, "Id", "Nombre");
             return View();
         }
 
-        // POST: Negocios/Create
+        // POST: Menus/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nombre,Descripcion,UserId")] NegocioInput negocio)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,Precio,CategoriaId,NegocioId")] MenuInput menu)
         {
             if (ModelState.IsValid)
             {
-                var nuevoNegocio = _mapper.Map<Negocio>(negocio);
-                nuevoNegocio.FechaCreacion = DateTime.Now;
-                _context.Add(nuevoNegocio);
+                _context.Add(_mapper.Map<Menu>(menu));
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", negocio.UserId);
-            return View(negocio);
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", menu.CategoriaId);
+            ViewData["NegocioId"] = new SelectList(_context.Negocios, "Id", "Nombre", menu.NegocioId);
+            return View(menu);
         }
 
-        // GET: Negocios/Edit/5
+        // GET: Menus/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Negocios == null)
+            if (id == null || _context.Menus == null)
             {
                 return NotFound();
             }
 
-            var negocio = await _context.Negocios.FindAsync(id);
-            if (negocio == null)
+            var menu = await _context.Menus.FindAsync(id);
+            if (menu == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Nombres", negocio.UserId);
-            return View(_mapper.Map<NegocioInput>(negocio));
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", menu.CategoriaId);
+            ViewData["NegocioId"] = new SelectList(_context.Negocios, "Id", "Nombre", menu.NegocioId);
+            return View(menu);
         }
 
-        // POST: Negocios/Edit/5
+        // POST: Menus/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,FechaCreacion,UserId")] NegocioInput negocio)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Precio,CategoriaId,NegocioId")] Menu menu)
         {
-            if (id != negocio.Id)
+            if (id != menu.Id)
             {
                 return NotFound();
             }
@@ -107,13 +106,12 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
             {
                 try
                 {
-                   
-                    _context.Update(_mapper.Map<Negocio>(negocio));
+                    _context.Update(menu);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!NegocioExists(negocio.Id))
+                    if (!MenuExists(menu.Id))
                     {
                         return NotFound();
                     }
@@ -124,51 +122,53 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", negocio.UserId);
-            return View(negocio);
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", menu.CategoriaId);
+            ViewData["NegocioId"] = new SelectList(_context.Negocios, "Id", "Nombre", menu.NegocioId);
+            return View(menu);
         }
 
-        // GET: Negocios/Delete/5
+        // GET: Menus/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Negocios == null)
+            if (id == null || _context.Menus == null)
             {
                 return NotFound();
             }
 
-            var negocio = await _context.Negocios
-                .Include(n => n.User)
+            var menu = await _context.Menus
+                .Include(m => m.Categoria)
+                .Include(m => m.Negocio)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (negocio == null)
+            if (menu == null)
             {
                 return NotFound();
             }
 
-            return View(negocio);
+            return View(menu);
         }
 
-        // POST: Negocios/Delete/5
+        // POST: Menus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Negocios == null)
+            if (_context.Menus == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Negocios'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Menus'  is null.");
             }
-            var negocio = await _context.Negocios.FindAsync(id);
-            if (negocio != null)
+            var menu = await _context.Menus.FindAsync(id);
+            if (menu != null)
             {
-                _context.Negocios.Remove(negocio);
+                _context.Menus.Remove(menu);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool NegocioExists(int id)
+        private bool MenuExists(int id)
         {
-          return (_context.Negocios?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Menus.FirstOrDefault(e => e.Id == id) != null);
         }
     }
 }

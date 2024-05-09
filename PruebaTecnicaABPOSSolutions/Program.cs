@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PruebaTecnicaABPOSSolutions.Data;
 using PruebaTecnicaABPOSSolutions.Models;

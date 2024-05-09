@@ -16,6 +16,8 @@ namespace PruebaTecnicaABPOSSolutions.Configurations
             CreateMap<Negocio, NegocioViewModel>()
                 .ForMember(vw => vw.User, opt => opt.MapFrom(src => src.User.Nombres))
                 .ForMember(vm=> vm.FechaCreacion, opt=>opt.MapFrom(src=> src.FechaCreacion.ToString("dd/MM/yyyy HH:mm:ss")));
+
+            CreateMap<MenuInput, Menu>();
         }
     }
 }
