@@ -78,7 +78,7 @@
         <a asp-controller="Home" asp-action="Index" class="logo d-flex align-items-center me-auto">
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <!-- <img src="assets/img/logo.png" alt=""> -->
-            <h1 class="sitename">Arsha</h1>
+            <h1 class="sitename">AB POS</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
@@ -114,15 +114,17 @@
 
     </div>
 </header>
-<div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
+<main class="main">
+    @RenderBody()
+</main>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2024 - PruebaTecnicaABPOSSolutions - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+<footer id="footer" class="footer">
+    <div class="container copyright text-center mt-4">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">AB POS</strong> <span>All Rights Reserved</span></p>
+        <div class="credits">
+            Designed by Alejandra Villegas <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
