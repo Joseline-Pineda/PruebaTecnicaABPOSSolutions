@@ -22,3 +22,23 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.table-custom thead th {
+    background-color: #343a40;
+    color: black;
+    border-color: #454d55;
+}
+
+.table-custom tbody th,
+.table-custom tbody td {
+    vertical-align: middle;
+}
+
+.table-custom tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table-custom tbody tr:hover {
+    background-color: #e9ecef;
+}
+
