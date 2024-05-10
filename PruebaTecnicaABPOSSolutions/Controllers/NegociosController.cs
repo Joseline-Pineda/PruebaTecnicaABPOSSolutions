@@ -128,29 +128,11 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
             return View(negocio);
         }
 
-        // GET: Negocios/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Negocios == null)
-            {
-                return NotFound();
-            }
-
-            var negocio = await _context.Negocios
-                .Include(n => n.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (negocio == null)
-            {
-                return NotFound();
-            }
-
-            return View(negocio);
-        }
+      
 
         // POST: Negocios/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed([FromRoute]int id)
         {
             if (_context.Negocios == null)
             {
