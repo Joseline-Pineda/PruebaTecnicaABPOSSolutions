@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = "_LayoutIdentity";
 }
 
 <h1>Details</h1>
@@ -44,5 +45,5 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="text-danger">Regresar</a>
 </div>

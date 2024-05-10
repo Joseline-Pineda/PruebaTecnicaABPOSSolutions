@@ -2,14 +2,16 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "_LayoutIdentity";
 }
-
+<div class="text-center">
 <h1>Edit</h1>
 
 <h4>Menu</h4>
+</div>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 offset-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -18,26 +20,31 @@
                 <input asp-for="Nombre" class="form-control" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="Descripcion" class="control-label"></label>
                 <input asp-for="Descripcion" class="form-control" />
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="Precio" class="control-label"></label>
                 <input asp-for="Precio" class="form-control" />
                 <span asp-validation-for="Precio" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="CategoriaId" class="control-label"></label>
                 <select asp-for="CategoriaId" class="form-control" asp-items="ViewBag.CategoriaId"></select>
                 <span asp-validation-for="CategoriaId" class="text-danger"></span>
             </div>
+             <br />
             <div class="form-group">
                 <label asp-for="NegocioId" class="control-label"></label>
                 <select asp-for="NegocioId" class="form-control" asp-items="ViewBag.NegocioId"></select>
                 <span asp-validation-for="NegocioId" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -45,8 +52,8 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="text-center">
+    <a asp-action="Index" class="text-danger">Regresar</a>
 </div>
 
 @section Scripts {

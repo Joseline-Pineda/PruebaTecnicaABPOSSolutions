@@ -2,14 +2,16 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "_LayoutIdentity";
 }
-
+<div class="text-center">
 <h1>Edit</h1>
 
 <h4>Negocio</h4>
+</div>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 offset-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -18,16 +20,19 @@
                 <input asp-for="Nombre" class="form-control" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="Descripcion" class="control-label"></label>
                 <input asp-for="Descripcion" class="form-control" />
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
                 <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -35,8 +40,8 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="text-center">
+    <a asp-action="Index" class="text-danger">Regresar</a>
 </div>
 
 @section Scripts {
