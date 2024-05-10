@@ -4,6 +4,14 @@
 }
 
 <h1>Index</h1>
+<br />
+<br />
+<div class="container" style="margin-top:100px">
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <div class="row">
+        <div class="col-md-12">
 <table class="table">
     <thead>
     <tr>
@@ -19,7 +27,9 @@
         <th>
             @Html.DisplayNameFor(model => model.IsAdmin)
         </th>
-        <th></th>
+        <th>
+            Opciones
+        </th>
     </tr>
     </thead>
     <tbody>
@@ -37,12 +47,47 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IsAdmin)
             </td>
-           @*  <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td> *@
+          
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="fas fa-pen fa-lg text-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar"></a>
+              @if(!item.IsAdmin)
+              {
+                <a class="fas fa-trash-alt fa-lg text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar" onclick="openModal('@item.Id')"></a>
+              }
+            </td>
         </tr>
     }
     </tbody>
 </table>
+</div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script src="/lib/data-tables/datatables.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+        let userId = 0;
+
+        function openModal(id) {
+            userId = id;
+            $("#modal").modal("show");
+        }
+
+
+        function remove() {
+
+            $.ajax({
+                url: "users/delete/" + userId,
+                type: 'DELETE',
+                success: function () {
+                    $('#modal').modal("hide");
+                    location.reload();
+                }
+            });
+        }
+    </script>
+}

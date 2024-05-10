@@ -18,6 +18,9 @@ namespace PruebaTecnicaABPOSSolutions.Configurations
                 .ForMember(vm=> vm.FechaCreacion, opt=>opt.MapFrom(src=> src.FechaCreacion.ToString("dd/MM/yyyy HH:mm:ss")));
 
             CreateMap<MenuInput, Menu>();
+            CreateMap<UserInput, User>()
+             .ForMember(i => i.Id, opt => opt.Ignore())
+             .ReverseMap();
         }
     }
 }

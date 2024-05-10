@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="fas fa-pen fa-lg text-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar"></a> 
-                                <a asp-action="Details" asp-route-id="@item.Id" class="fas fa-bars fa-lg mx-2 text-bg-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Detalles"></a>
-                                <a class="fas fa-trash-alt fa-lg text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar" onclick="openModal('@item.Id')"></a>
+               <a asp-action="Edit" asp-route-id="@item.Id" class="fas fa-pen fa-lg text-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar"></a> 
+               <a asp-action="Details" asp-route-id="@item.Id" class="fas fa-bars fa-lg mx-2 text-bg-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Detalles"></a>
+               <a class="fas fa-trash-alt fa-lg text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar" onclick="openModal('@item.Id')"></a>
             </td>
         </tr>
 }
