@@ -127,29 +127,9 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
             return View(menu);
         }
 
-        // GET: Menus/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Menus == null)
-            {
-                return NotFound();
-            }
-
-            var menu = await _context.Menus
-                .Include(m => m.Categoria)
-                .Include(m => m.Negocio)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (menu == null)
-            {
-                return NotFound();
-            }
-
-            return View(menu);
-        }
-
+       
         // POST: Menus/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpDelete, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Menus == null)

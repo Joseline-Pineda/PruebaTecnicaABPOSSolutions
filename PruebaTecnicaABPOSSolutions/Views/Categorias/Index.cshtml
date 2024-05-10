@@ -32,8 +32,8 @@
             </td>
             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="fas fa-pen fa-lg text-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar"></a> 
-                                <a asp-action="Details" asp-route-id="@item.Id" class="fas fa-bars fa-lg mx-2 text-bg-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Detalles"></a> 
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="fas fa-trash-alt fa-lg text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar"></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="fas fa-bars fa-lg mx-2 text-bg-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Detalles"></a>
+                                <a class="fas fa-trash-alt fa-lg text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar" onclick="openModal('@item.Id')"></a>
             </td>
         </tr>
 }
@@ -49,6 +49,24 @@
         $(document).ready(function () {
             $('#myTable').DataTable();
         });
+        let categoriaId = 0;
 
+        function openModal(id) {
+            categoriaId = id;
+            $("#modal").modal("show");
+        }
+
+
+        function remove() {
+
+            $.ajax({
+                url: "categorias/delete/" + categoriaId,
+                type: 'DELETE',
+                success: function () {
+                    $('#modal').modal("hide");
+                    location.reload();
+                }
+            });
+        }
     </script>
 }
