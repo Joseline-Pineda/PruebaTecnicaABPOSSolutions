@@ -24,4 +24,4 @@ por parte de los cliente, esta aplicación debe permitir:
 3. Ejecuta el comando `dotnet ef database update` para aplicar las migraciones y crear la base de datos.
 
 
-(PruebaTecnicaABPOSSolutions/wwwroot/img/ABPOS-Main.png)
+[PruebaTecnicaABPOSSolutions/wwwroot/img/ABPOS-Main.png](https://raw.githubusercontent.com/Joseline-Pineda/PruebaTecnicaABPOSSolutions/32fe016d8b252175b7c1c04571c726c583f38c94/PruebaTecnicaABPOSSolutions/wwwroot/img/ABPOS-Main.png)
