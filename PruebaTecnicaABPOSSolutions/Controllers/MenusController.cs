@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,18 +13,26 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public MenusController(ApplicationDbContext context, IMapper mapper)
+        public MenusController(ApplicationDbContext context, 
+            IMapper mapper,  
+            UserManager<User> userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         // GET: Menus
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Menus.Include(m => m.Categoria).Include(m => m.Negocio);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var menus = await _context.Menus!.Include(m => m.Categoria).Include(m => m.Negocio).ToListAsync();
+            if (user.IsAdmin) return View(menus);
+            var negocios = await _context.Negocios!.Include(n => n.User).Where(n => n.UserId == user.Id).ToListAsync();
+            menus = menus.Where(m=> negocios.Any(n=>n.Id == m.NegocioId)).ToList();
+            return View(menus);
         }
 
         // GET: Menus/Details/5
@@ -47,10 +56,16 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
         }
 
         // GET: Menus/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var user = await _userManager.GetUserAsync(User);
+            var negocios = await _context.Negocios!.Include(n => n.User).ToListAsync();
+            if (!user.IsAdmin)
+            {
+                negocios = negocios.Where(n => n.UserId == user.Id).ToList();
+            }
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre");
-            ViewData["NegocioId"] = new SelectList(_context.Negocios, "Id", "Nombre");
+            ViewData["NegocioId"] = new SelectList(negocios, "Id", "Nombre");
             return View();
         }
 
@@ -67,8 +82,16 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            var user = await _userManager.GetUserAsync(User);
+            var negocios = await _context.Negocios!.Include(n => n.User).ToListAsync();
+            if (!user.IsAdmin)
+            {
+                negocios = negocios.Where(n => n.UserId == user.Id).ToList();
+            }
+
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", menu.CategoriaId);
-            ViewData["NegocioId"] = new SelectList(_context.Negocios, "Id", "Nombre", menu.NegocioId);
+            ViewData["NegocioId"] = new SelectList(negocios, "Id", "Nombre", menu.NegocioId);
             return View(menu);
         }
 
@@ -85,8 +108,14 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
             {
                 return NotFound();
             }
+            var user = await _userManager.GetUserAsync(User);
+            var negocios = await _context.Negocios!.Include(n => n.User).ToListAsync();
+            if (!user.IsAdmin)
+            {
+                negocios = negocios.Where(n => n.UserId == user.Id).ToList();
+            }
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", menu.CategoriaId);
-            ViewData["NegocioId"] = new SelectList(_context.Negocios, "Id", "Nombre", menu.NegocioId);
+            ViewData["NegocioId"] = new SelectList(negocios, "Id", "Nombre", menu.NegocioId);
             return View(menu);
         }
 
@@ -122,8 +151,14 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var user = await _userManager.GetUserAsync(User);
+            var negocios = await _context.Negocios!.Include(n => n.User).ToListAsync();
+            if (!user.IsAdmin)
+            {
+                negocios = negocios.Where(n => n.UserId == user.Id).ToList();
+            }
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", menu.CategoriaId);
-            ViewData["NegocioId"] = new SelectList(_context.Negocios, "Id", "Nombre", menu.NegocioId);
+            ViewData["NegocioId"] = new SelectList(negocios, "Id", "Nombre", menu.NegocioId);
             return View(menu);
         }
 
@@ -148,7 +183,7 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
 
         private bool MenuExists(int id)
         {
-          return (_context.Menus.FirstOrDefault(e => e.Id == id) != null);
+          return (_context.Menus!.FirstOrDefault(e => e.Id == id) != null);
         }
     }
 }

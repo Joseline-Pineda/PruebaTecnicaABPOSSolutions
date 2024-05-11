@@ -29,7 +29,7 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            var negocios = await _context.Negocios.Include(n => n.User).ToListAsync();
+            var negocios = await _context.Negocios!.Include(n => n.User).ToListAsync();
             if (!user.IsAdmin)
             {
                 negocios = negocios.Where(n => n.UserId == user.Id).ToList();
