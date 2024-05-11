@@ -1,8 +1,11 @@
-﻿@model PruebaTecnicaABPOSSolutions.Inputs.NegocioInput
+﻿@using Microsoft.AspNetCore.Identity;
+@model PruebaTecnicaABPOSSolutions.Inputs.NegocioInput
+@inject UserManager<User> UserManager
 
 @{
     ViewData["Title"] = "Edit";
     Layout = "_LayoutIdentity";
+    var user = await UserManager.GetUserAsync(User);
 }
 <div class="text-center">
 <h1>Edit</h1>
@@ -27,11 +30,14 @@
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
             <br />
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
+             @if (user.IsAdmin)
+            {
+                <div class="form-group">
+                    <label asp-for="UserId" class="control-label"></label>
                 <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
+            }
             <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

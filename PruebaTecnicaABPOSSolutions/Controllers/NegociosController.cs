@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,19 +14,27 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public NegociosController(ApplicationDbContext context, IMapper mapper)
+        public NegociosController(ApplicationDbContext context,
+            IMapper mapper,
+            UserManager<User> userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         // GET: Negocios
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Negocios.Include(n => n.User);
-            var result = await applicationDbContext.ToListAsync();
-            return View(_mapper.Map<IEnumerable<NegocioViewModel>>(result));
+            var user = await _userManager.GetUserAsync(User);
+            var negocios = await _context.Negocios.Include(n => n.User).ToListAsync();
+            if (!user.IsAdmin)
+            {
+                negocios = negocios.Where(n => n.UserId == user.Id).ToList();
+            }
+            return View(_mapper.Map<IEnumerable<NegocioViewModel>>(negocios));
         }
 
         // GET: Negocios/Details/5
@@ -63,8 +72,14 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
                 var nuevoNegocio = _mapper.Map<Negocio>(negocio);
                 nuevoNegocio.FechaCreacion = DateTime.Now;
+                if (!user.IsAdmin) 
+                {
+                    nuevoNegocio.UserId = user.Id;
+                }
+               
                 _context.Add(nuevoNegocio);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -107,7 +122,11 @@ namespace PruebaTecnicaABPOSSolutions.Controllers
             {
                 try
                 {
-                   
+                    var user = await _userManager.GetUserAsync(User);
+                    if (!user.IsAdmin)
+                    {
+                        negocio.UserId = user.Id;
+                    }
                     _context.Update(_mapper.Map<Negocio>(negocio));
                     await _context.SaveChangesAsync();
                 }
