@@ -13,6 +13,19 @@ namespace PruebaTecnicaABPOSSolutions.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Categoria>().HasData(
+                new Categoria { Id = 1, Nombre = "Entradas" },
+                new Categoria { Id = 2, Nombre = "Platos Principales" },
+                new Categoria { Id = 3, Nombre = "Postres" },
+                new Categoria { Id = 4, Nombre = "Bebidas" },
+                new Categoria { Id = 5, Nombre = "Especiales del Chef" }
+            );
+        }
+
     }
 }

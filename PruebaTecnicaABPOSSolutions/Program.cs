@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using PruebaTecnicaABPOSSolutions.Data;
+using PruebaTecnicaABPOSSolutions.Data.Migrations;
 using PruebaTecnicaABPOSSolutions.Models;
 
 namespace PruebaTecnicaABPOSSolutions
@@ -34,6 +36,10 @@ namespace PruebaTecnicaABPOSSolutions
                 app.UseHsts();
             }
 
+            using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                SeedData.Initialize(serviceScope.ServiceProvider);
+            }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
