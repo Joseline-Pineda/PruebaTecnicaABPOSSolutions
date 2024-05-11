@@ -22,3 +22,6 @@ por parte de los cliente, esta aplicación debe permitir:
 1. Abre una terminal en el directorio raíz del proyecto.
 2. Ejecuta el comando `dotnet restore` para restaurar las dependencias del proyecto.
 3. Ejecuta el comando `dotnet ef database update` para aplicar las migraciones y crear la base de datos.
+
+
+(PruebaTecnicaABPOSSolutions/wwwroot/img/ABPOS-Main.png)
