@@ -23,5 +23,14 @@ por parte de los cliente, esta aplicación debe permitir:
 2. Ejecuta el comando `dotnet restore` para restaurar las dependencias del proyecto.
 3. Ejecuta el comando `dotnet ef database update` para aplicar las migraciones y crear la base de datos.
 
+Credenciales de prueba:
+
+Admin:
+admin@example.com 
+P@ssw0rd
+
+Cliente:
+user@example.com
+P@ssw0rd
 
 [![ABPOS-Main.png](https://i.postimg.cc/mDMzKsvJ/ABPOS-Main.png)](https://postimg.cc/cgxL8V4B)
